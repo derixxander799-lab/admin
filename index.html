@@ -109,29 +109,29 @@
 </head>
 <body>
 
-  <div class="card">
-    <h2>Register Device</h2>
+<div class="card">
+  <h2>Register Device</h2>
 
-    <label>ID Device</label>
-    <input type="text" id="iddevice" placeholder="Masukkan ID Device">
+  <label>ID Device</label>
+  <input type="text" id="iddevice" placeholder="Masukkan ID Device">
 
-    <label>Durasi</label>
-    <select id="durasi">
-      <option value="">-- Pilih Durasi --</option>
-      <option value="3">3 Hari</option>
-      <option value="7">7 Hari</option>
-      <option value="15">15 Hari</option>
-    </select>
+  <label>Durasi</label>
+  <select id="durasi">
+    <option value="">-- Pilih Durasi --</option>
+    <option value="3">3 Hari</option>
+    <option value="7">7 Hari</option>
+    <option value="15">15 Hari</option>
+  </select>
 
-    <div class="harga" id="harga">Harga: -</div>
+  <div class="harga" id="harga">Harga: -</div>
 
-    <button onclick="register()">REGISTER</button>
+  <button onclick="register()">REGISTER</button>
 
-    <div class="loading" id="loading">⏳ Mengirim data...</div>
+  <div class="loading" id="loading">⏳ Mengirim data...</div>
 
-    <div class="result" id="result"></div>
-    <button id="copyBtn" onclick="copyText()">📋 Salin Transaksi</button>
-  </div>
+  <div class="result" id="result"></div>
+  <button id="copyBtn" onclick="copyText()">📋 Salin Transaksi</button>
+</div>
 
 <script>
   const hargaMap = {
@@ -145,6 +145,7 @@
   const result = document.getElementById("result");
   const loading = document.getElementById("loading");
   const copyBtn = document.getElementById("copyBtn");
+  const iddeviceInput = document.getElementById("iddevice");
 
   durasiSelect.addEventListener("change", () => {
     const d = durasiSelect.value;
@@ -154,7 +155,7 @@
   });
 
   function register() {
-    const iddevice = document.getElementById("iddevice").value.trim();
+    const iddevice = iddeviceInput.value.trim();
     const durasi = durasiSelect.value;
 
     if (!iddevice || !durasi) {
@@ -193,6 +194,13 @@
     });
   }
 
+  function resetForm() {
+    iddeviceInput.value = "";
+    durasiSelect.value = "";
+    hargaDiv.textContent = "Harga: -";
+    iddeviceInput.focus();
+  }
+
   function copyText() {
     const raw = result.innerText;
 
@@ -206,6 +214,11 @@ Terima kasih 🙏`;
     navigator.clipboard.writeText(formatted)
       .then(() => {
         alert("Transaksi berhasil disalin 📋");
+
+        // RESET SETELAH COPY
+        resetForm();
+        result.style.display = "none";
+        copyBtn.style.display = "none";
       })
       .catch(() => {
         alert("Gagal menyalin transaksi");
