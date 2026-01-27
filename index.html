@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Device</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+
+    .card {
+      background: #fff;
+      width: 100%;
+      max-width: 420px;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #203a43;
+    }
+
+    label {
+      font-size: 14px;
+      color: #444;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    select {
+      cursor: pointer;
+    }
+
+    .harga {
+      background: #f1f5f9;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 15px;
+      color: #0f2027;
+    }
+
+    button {
+      background: #2c5364;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #203a43;
+    }
+
+    #copyBtn {
+      background: #16a34a;
+      display: none;
+    }
+
+    #copyBtn:hover {
+      background: #15803d;
+    }
+
+    .result {
+      white-space: pre-line;
+      margin-top: 10px;
+      font-size: 14px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #eef2f7;
+      display: none;
+    }
+
+    .loading {
+      text-align: center;
+      display: none;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Register Device</h2>
+
+    <label>ID Device</label>
+    <input type="text" id="iddevice" placeholder="Masukkan ID Device">
+
+    <label>Durasi</label>
+    <select id="durasi">
+      <option value="">-- Pilih Durasi --</option>
+      <option value="3">3 Hari</option>
+      <option value="7">7 Hari</option>
+      <option value="15">15 Hari</option>
+    </select>
+
+    <div class="harga" id="harga">Harga: -</div>
+
+    <button onclick="register()">REGISTER</button>
+
+    <div class="loading" id="loading">⏳ Mengirim data...</div>
+
+    <div class="result" id="result"></div>
+    <button id="copyBtn" onclick="copyText()">📋 Salin Transaksi</button>
+  </div>
+
+<script>
+  const hargaMap = {
+    3: 3000,
+    7: 5000,
+    15: 10000
+  };
+
+  const durasiSelect = document.getElementById("durasi");
+  const hargaDiv = document.getElementById("harga");
+  const result = document.getElementById("result");
+  const loading = document.getElementById("loading");
+  const copyBtn = document.getElementById("copyBtn");
+
+  durasiSelect.addEventListener("change", () => {
+    const d = durasiSelect.value;
+    hargaDiv.textContent = d
+      ? "Harga: Rp " + hargaMap[d].toLocaleString("id-ID")
+      : "Harga: -";
+  });
+
+  function register() {
+    const iddevice = document.getElementById("iddevice").value.trim();
+    const durasi = durasiSelect.value;
+
+    if (!iddevice || !durasi) {
+      alert("ID Device dan Durasi wajib diisi!");
+      return;
+    }
+
+    loading.style.display = "block";
+    result.style.display = "none";
+    copyBtn.style.display = "none";
+
+    const url = "https://script.google.com/macros/s/AKfycbwIiLynEPaWWV0YClkOZRHyB2TvwKjK405Fa3rGYw0uj5jNOmNwSiE0Joay5KmXUjoV9Q/exec";
+
+    const formData = new URLSearchParams();
+    formData.append("iddevice", iddevice);
+    formData.append("durasi", durasi);
+
+    fetch(url, {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.text())
+    .then(text => {
+      loading.style.display = "none";
+      result.style.display = "block";
+      result.textContent = text;
+
+      if (text.includes("REGISTER BERHASIL")) {
+        copyBtn.style.display = "block";
+      }
+    })
+    .catch(err => {
+      loading.style.display = "none";
+      result.style.display = "block";
+      result.textContent = "ERROR: " + err;
+    });
+  }
+
+  function copyText() {
+    const raw = result.innerText;
+
+    const formatted =
+`📌 BUKTI REGISTER DEVICE
+
+${raw}
+
+Terima kasih 🙏`;
+
+    navigator.clipboard.writeText(formatted)
+      .then(() => {
+        alert("Transaksi berhasil disalin 📋");
+      })
+      .catch(() => {
+        alert("Gagal menyalin transaksi");
+      });
+  }
+</script>
+
+</body>
+</html>
