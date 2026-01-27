@@ -1,189 +1,204 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register Device</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Device Manager</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 15px;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
 
-    .card {
-      background: #fff;
-      width: 100%;
-      max-width: 420px;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-    }
+.container {
+  width: 100%;
+  max-width: 460px;
+}
 
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #203a43;
-    }
+.card {
+  background: #fff;
+  padding: 22px;
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  margin-bottom: 20px;
+}
 
-    label {
-      font-size: 14px;
-      color: #444;
-      margin-bottom: 5px;
-      display: block;
-    }
+h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #203a43;
+}
 
-    input, select, button {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-    }
+label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  display: block;
+}
 
-    select {
-      cursor: pointer;
-    }
+input, select, button {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
 
-    .harga {
-      background: #f1f5f9;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 15px;
-      color: #0f2027;
-    }
+.harga {
+  background: #f1f5f9;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+}
 
-    button {
-      background: #2c5364;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
+button {
+  background: #2c5364;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    button:hover {
-      background: #203a43;
-    }
+button:hover {
+  background: #203a43;
+}
 
-    #copyBtn {
-      background: #16a34a;
-      display: none;
-    }
+#copyBtn {
+  background: #16a34a;
+  display: none;
+}
 
-    #copyBtn:hover {
-      background: #15803d;
-    }
+#copyBtn:hover {
+  background: #15803d;
+}
 
-    .result {
-      white-space: pre-line;
-      margin-top: 10px;
-      font-size: 14px;
-      padding: 12px;
-      border-radius: 8px;
-      background: #eef2f7;
-      display: none;
-    }
+.result {
+  display: none;
+  white-space: pre-line;
+  background: #eef2f7;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 14px;
+}
 
-    .loading {
-      text-align: center;
-      display: none;
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 10px;
-    }
-  </style>
+.loading {
+  display: none;
+  text-align: center;
+  margin-top: 8px;
+}
+</style>
 </head>
 <body>
 
-<div class="card">
-  <h2>Register Device</h2>
+<div class="container">
 
-  <label>ID Device</label>
-  <input type="text" id="iddevice" placeholder="Masukkan ID Device">
+  <!-- ================= REGISTER ================= -->
+  <div class="card">
+    <h2>Register Device</h2>
 
-  <label>Durasi</label>
-  <select id="durasi">
-    <option value="">-- Pilih Durasi --</option>
-    <option value="3">3 Hari</option>
-    <option value="7">7 Hari</option>
-    <option value="15">15 Hari</option>
-  </select>
+    <label>ID Device</label>
+    <input type="text" id="reg_iddevice" placeholder="ID Device baru">
 
-  <div class="harga" id="harga">Harga: -</div>
+    <label>Durasi</label>
+    <select id="reg_durasi">
+      <option value="">-- Pilih Durasi --</option>
+      <option value="3">3 Hari</option>
+      <option value="7">7 Hari</option>
+      <option value="15">15 Hari</option>
+    </select>
 
-  <button onclick="register()">REGISTER</button>
+    <div class="harga" id="reg_harga">Harga: -</div>
 
-  <div class="loading" id="loading">⏳ Mengirim data...</div>
+    <button onclick="submitData('register')">REGISTER</button>
+  </div>
 
-  <div class="result" id="result"></div>
-  <button id="copyBtn" onclick="copyText()">📋 Salin Transaksi</button>
+  <!-- ================= PERPANJANG ================= -->
+  <div class="card">
+    <h2>Perpanjang Durasi</h2>
+
+    <label>ID Device</label>
+    <input type="text" id="ext_iddevice" placeholder="ID Device terdaftar">
+
+    <label>Tambah Durasi</label>
+    <select id="ext_durasi">
+      <option value="">-- Pilih Durasi --</option>
+      <option value="3">+3 Hari</option>
+      <option value="7">+7 Hari</option>
+      <option value="15">+15 Hari</option>
+    </select>
+
+    <div class="harga" id="ext_harga">Harga: -</div>
+
+    <button onclick="submitData('extend')">PERPANJANG</button>
+  </div>
+
+  <!-- ================= RESULT ================= -->
+  <div class="card">
+    <div class="loading" id="loading">⏳ Memproses...</div>
+    <div class="result" id="result"></div>
+    <button id="copyBtn" onclick="copyText()">📋 Salin Transaksi</button>
+  </div>
+
 </div>
 
 <script>
-  const hargaMap = {
-    3: 3000,
-    7: 5000,
-    15: 10000
-  };
+const URL_API = "https://script.google.com/macros/s/AKfycbwIiLynEPaWWV0YClkOZRHyB2TvwKjK405Fa3rGYw0uj5jNOmNwSiE0Joay5KmXUjoV9Q/exec";
 
-  const durasiSelect = document.getElementById("durasi");
-  const hargaDiv = document.getElementById("harga");
-  const result = document.getElementById("result");
-  const loading = document.getElementById("loading");
-  const copyBtn = document.getElementById("copyBtn");
-  const iddeviceInput = document.getElementById("iddevice");
+const hargaMap = {3:3000,7:5000,15:10000};
 
-  durasiSelect.addEventListener("change", () => {
-    const d = durasiSelect.value;
-    hargaDiv.textContent = d
-      ? "Harga: Rp " + hargaMap[d].toLocaleString("id-ID")
-      : "Harga: -";
-  });
+function updateHarga(selectId, hargaId) {
+  const d = document.getElementById(selectId).value;
+  document.getElementById(hargaId).textContent =
+    d ? "Harga: Rp " + hargaMap[d].toLocaleString("id-ID") : "Harga: -";
+}
 
-  function register() {
-    const iddevice = iddeviceInput.value.trim();
-    const durasi = durasiSelect.value;
+reg_durasi.onchange = () => updateHarga("reg_durasi","reg_harga");
+ext_durasi.onchange = () => updateHarga("ext_durasi","ext_harga");
 
-    if (!iddevice || !durasi) {
-      alert("ID Device dan Durasi wajib diisi!");
-      return;
-    }
+function submitData(type) {
+  let iddevice, durasi;
 
-    loading.style.display = "block";
-    result.style.display = "none";
-    copyBtn.style.display = "none";
+  if (type === "register") {
+    iddevice = reg_iddevice.value.trim();
+    durasi = reg_durasi.value;
+  } else {
+    iddevice = ext_iddevice.value.trim();
+    durasi = ext_durasi.value;
+  }
 
-    const url = "https://script.google.com/macros/s/AKfycbwIiLynEPaWWV0YClkOZRHyB2TvwKjK405Fa3rGYw0uj5jNOmNwSiE0Joay5KmXUjoV9Q/exec";
+  if (!iddevice || !durasi) {
+    alert("ID Device dan Durasi wajib diisi");
+    return;
+  }
 
-    const formData = new URLSearchParams();
-    formData.append("iddevice", iddevice);
-    formData.append("durasi", durasi);
+  loading.style.display = "block";
+  result.style.display = "none";
+  copyBtn.style.display = "none";
 
-    fetch(url, {
-      method: "POST",
-      body: formData
-    })
-    .then(res => res.text())
+  const data = new URLSearchParams();
+  data.append("iddevice", iddevice);
+  data.append("durasi", durasi);
+
+  fetch(URL_API, { method: "POST", body: data })
+    .then(r => r.text())
     .then(text => {
       loading.style.display = "none";
       result.style.display = "block";
       result.textContent = text;
 
-      if (text.includes("REGISTER BERHASIL")) {
+      if (text.includes("BERHASIL")) {
         copyBtn.style.display = "block";
       }
     })
@@ -192,38 +207,25 @@
       result.style.display = "block";
       result.textContent = "ERROR: " + err;
     });
-  }
+}
 
-  function resetForm() {
-    iddeviceInput.value = "";
-    durasiSelect.value = "";
-    hargaDiv.textContent = "Harga: -";
-    iddeviceInput.focus();
-  }
+function copyText() {
+  navigator.clipboard.writeText(result.innerText)
+    .then(() => {
+      alert("Transaksi disalin 📋");
 
-  function copyText() {
-    const raw = result.innerText;
+      reg_iddevice.value = "";
+      reg_durasi.value = "";
+      reg_harga.textContent = "Harga: -";
 
-    const formatted =
-`📌 BUKTI REGISTER DEVICE
+      ext_iddevice.value = "";
+      ext_durasi.value = "";
+      ext_harga.textContent = "Harga: -";
 
-${raw}
-
-Terima kasih 🙏`;
-
-    navigator.clipboard.writeText(formatted)
-      .then(() => {
-        alert("Transaksi berhasil disalin 📋");
-
-        // RESET SETELAH COPY
-        resetForm();
-        result.style.display = "none";
-        copyBtn.style.display = "none";
-      })
-      .catch(() => {
-        alert("Gagal menyalin transaksi");
-      });
-  }
+      result.style.display = "none";
+      copyBtn.style.display = "none";
+    });
+}
 </script>
 
 </body>
