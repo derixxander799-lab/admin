@@ -1,101 +1,391 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
+  <!DOCTYPE html>
+  <html lang="id">
+  <head>
   <meta charset="UTF-8">
-  <title>Register / Extend Device</title>
+  <title>Register / Extend Device - Blue Night Glow</title>
+
+  <!-- Font & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      padding: 30px;
+:root{
+  --blue-main:#00b7ff;
+  --blue-soft:#7ad1ff;
+  --blue-dark:#0a0f2e;
+  --glass:rgba(10,15,50,.75);
+}
+
+/* RESET */
+*{box-sizing:border-box}
+
+/* BODY */
+html,body{
+  margin:0;
+  height:100%;
+  font-family:'Inter',sans-serif;
+  background:
+    radial-gradient(circle at top, #1b2b6f 0%, #06081f 60%),
+    linear-gradient(135deg,#05071a,#0b1240);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  animation:bgMove 15s infinite alternate;
+}
+
+@keyframes bgMove{
+  0%{background-position:0 0}
+  100%{background-position:100% 100%}
+}
+
+/* MAIN BOX */
+.box{
+  position:relative;
+  width:90%;
+  max-width:480px;
+  padding:32px;
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(15,25,80,.85),rgba(5,10,35,.85));
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(0,180,255,.35);
+  box-shadow:
+    0 0 40px rgba(0,140,255,.25),
+    inset 0 0 30px rgba(0,120,255,.1);
+  animation:float 6s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+  100%{transform:translateY(0)}
+}
+
+/* TITLE */
+h2{
+  text-align:center;
+  color:var(--blue-soft);
+  font-size:26px;
+  font-weight:800;
+  margin-bottom:26px;
+  text-shadow:0 0 12px rgba(0,180,255,.9);
+}
+
+/* LABEL */
+label{
+  margin-top:14px;
+  display:block;
+  color:#bfe9ff;
+  font-weight:600;
+  letter-spacing:.3px;
+}
+
+/* INPUT & SELECT */
+input,select{
+  width:100%;
+  padding:13px 15px;
+  margin-top:6px;
+  border-radius:10px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(0,170,255,.35);
+  color:#e9f9ff;
+  font-size:15px;
+  transition:.3s;
+  box-shadow:inset 0 0 8px rgba(0,0,0,.6);
+}
+
+input::placeholder{color:#6fbfff}
+
+input:focus,select:focus{
+  outline:none;
+  border-color:var(--blue-main);
+  box-shadow:
+    0 0 12px rgba(0,180,255,.8),
+    inset 0 0 12px rgba(0,180,255,.25);
+  transform:scale(1.01);
+}
+
+/* BUTTON */
+button{
+  width:100%;
+  margin-top:22px;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:800;
+  color:#fff;
+  cursor:pointer;
+  background:linear-gradient(120deg,#0077ff,#00d4ff);
+  box-shadow:
+    0 0 20px rgba(0,180,255,.8),
+    inset 0 0 12px rgba(255,255,255,.15);
+  transition:.35s;
+  position:relative;
+  overflow:hidden;
+}
+
+button::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:translateX(-100%);
+}
+
+button:hover::after{
+  transform:translateX(100%);
+  transition:.6s;
+}
+
+button:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 0 35px rgba(0,200,255,1);
+}
+
+/* LOADING */
+.loading-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(2,5,20,.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  border-radius:18px;
+  z-index:99;
+}
+
+.spinner{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  border:5px solid rgba(255,255,255,.1);
+  border-top:5px solid var(--blue-main);
+  animation:spin 1s linear infinite,glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes glow{from{box-shadow:0 0 10px}to{box-shadow:0 0 30px}}
+
+/* POPUP */
+.popup-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(3,5,25,.96);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.popup{
+  width:90%;
+  max-width:420px;
+  padding:26px;
+  text-align:center;
+  background:linear-gradient(180deg,#0b1d55,#040a2b);
+  border-radius:18px;
+  border:2px solid var(--blue-main);
+  box-shadow:0 0 40px rgba(0,180,255,.7);
+  animation:popupIn .45s ease;
+}
+
+@keyframes popupIn{
+  from{opacity:0;transform:scale(.85)}
+  to{opacity:1;transform:scale(1)}
+}
+
+.popup i{
+  font-size:42px;
+  margin-bottom:12px;
+  color:var(--blue-main);
+  text-shadow:0 0 15px var(--blue-main);
+}
+
+.popup.error{border-color:#ff3b3b}
+.popup.error i{color:#ff3b3b;text-shadow:0 0 15px #ff3b3b}
+
+.details{
+  margin-top:14px;
+  padding:12px;
+  background:rgba(0,40,90,.6);
+  border-radius:10px;
+  border:1px solid rgba(0,170,255,.4);
+  color:#e6f8ff;
+  font-size:14px;
+  max-height:180px;
+  overflow:auto;
+}
+
+/* POPUP BUTTONS */
+.btn-group{
+  margin-top:16px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+}
+
+.popup button{
+  width:auto;
+  padding:10px 16px;
+  border-radius:10px;
+}
+
+/* ===== PREMIUM DARK BLUE DROPDOWN ===== */
+select{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  background:
+    linear-gradient(180deg,rgba(15,30,90,.9),rgba(5,10,40,.9));
+  color:#dff4ff;
+  cursor:pointer;
+  position:relative;
+}
+
+/* Custom arrow */
+select{
+  background-image:
+    linear-gradient(45deg,transparent 50%,#00c8ff 50%),
+    linear-gradient(135deg,#00c8ff 50%,transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 4px),
+    calc(100% - 12px) calc(50% - 4px);
+  background-size:6px 6px;
+  background-repeat:no-repeat;
+  padding-right:40px;
+}
+
+/* Dropdown list */
+option{
+  background:#08133b;
+  color:#ccecff;
+  font-weight:600;
+}
+
+/* Hover (support terbatas tapi tetep cakep) */
+option:hover{
+  background:#0a4b88;
+  color:#ffffff;
+}
+
+/* Focus glow */
+select:focus{
+  box-shadow:
+    0 0 14px rgba(0,200,255,.9),
+    inset 0 0 12px rgba(0,200,255,.35);
+}
+
+</style>
+
+  </head>
+  <body>
+
+  <div class="box">
+    <h2><i class="fa-solid fa-layer-group"></i> Register / Extend Device</h2>
+
+    <label><i class="fa-solid fa-arrow-right-arrow-left"></i> Action</label>
+    <select id="action">
+      <option value="register">Register</option>
+      <option value="extend">Perpanjang</option>
+    </select>
+
+    <label><i class="fa-solid fa-id-badge"></i> ID Device</label>
+    <input type="text" id="iddevice" placeholder="Contoh: DEVICE123">
+
+    <label><i class="fa-solid fa-clock"></i> Durasi</label>
+    <select id="durasi">
+      <option value="3">3 Hari - Rp 3.000</option>
+      <option value="7">7 Hari - Rp 5.000</option>
+      <option value="15">15 Hari - Rp 10.000</option>
+    </select>
+
+    <button onclick="submitData()">
+      <i class="fa-solid fa-paper-plane"></i> Kirim
+    </button>
+
+    <div class="loading-overlay" id="loading">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="popup-overlay">
+    <div class="popup" id="popup">
+      <i id="popup-icon" class="fa-solid fa-info-circle"></i>
+      <div id="popup-message"></div>
+      <div id="popup-details" class="details" style="display:none;"></div>
+      <div class="btn-group">
+        <button class="copy-btn" onclick="copyDetails()" style="display:none;">Salin</button>
+        <button class="close-btn" onclick="closePopup()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIiLynEPaWWV0YClkOZRHyB2TvwKjK405Fa3rGYw0uj5jNOmNwSiE0Joay5KmXUjoV9Q/exec";
+
+  function showPopup(type, message, details=''){
+    const overlay = document.getElementById('popup-overlay');
+    const popup = document.getElementById('popup');
+    const icon = document.getElementById('popup-icon');
+    const msg = document.getElementById('popup-message');
+    const det = document.getElementById('popup-details');
+    const copyBtn = document.querySelector('.copy-btn');
+
+    popup.className = 'popup ' + type;
+    icon.className = type==='success'
+      ? 'fa-solid fa-circle-check'
+      : 'fa-solid fa-circle-exclamation';
+    msg.innerText = message;
+
+    if(type==='success' && details){
+      det.style.display='block'; det.innerText=details;
+      copyBtn.style.display='inline-block';
+    } else {
+      det.style.display='none'; copyBtn.style.display='none';
     }
-    .box {
-      background: #fff;
-      padding: 20px;
-      max-width: 400px;
-      margin: auto;
-      border-radius: 6px;
-      box-shadow: 0 0 10px rgba(0,0,0,.1);
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-    }
-    button {
-      background: #2196F3;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #1976D2;
-    }
-    pre {
-      background: #eee;
-      padding: 10px;
-      white-space: pre-wrap;
-      margin-top: 15px;
-    }
-  </style>
-</head>
-<body>
-
-<div class="box">
-  <h2>Register / Extend Device</h2>
-
-  <label>Action</label>
-  <select id="action">
-    <option value="register">Register</option>
-    <option value="extend">Perpanjang</option>
-  </select>
-
-  <label>ID Device</label>
-  <input type="text" id="iddevice" placeholder="Contoh: DEVICE123">
-
-  <label>Durasi</label>
-  <select id="durasi">
-    <option value="3">3 Hari - Rp 3.000</option>
-    <option value="7">7 Hari - Rp 5.000</option>
-    <option value="15">15 Hari - Rp 10.000</option>
-  </select>
-
-  <button onclick="submitData()">Kirim</button>
-
-  <pre id="result">Hasil akan muncul di sini...</pre>
-</div>
-
-<script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIiLynEPaWWV0YClkOZRHyB2TvwKjK405Fa3rGYw0uj5jNOmNwSiE0Joay5KmXUjoV9Q/exec";
-
-function submitData() {
-  const action   = document.getElementById("action").value;
-  const iddevice = document.getElementById("iddevice").value;
-  const durasi   = document.getElementById("durasi").value;
-
-  if (!iddevice) {
-    alert("ID Device wajib diisi!");
-    return;
+    overlay.style.display='flex';
   }
 
-  const formData = new URLSearchParams();
-  formData.append("action", action);
-  formData.append("iddevice", iddevice);
-  formData.append("durasi", durasi);
+  function closePopup(){ document.getElementById('popup-overlay').style.display='none'; }
 
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.text())
-  .then(text => {
-    document.getElementById("result").textContent = text;
-  })
-  .catch(err => {
-    document.getElementById("result").textContent = "ERROR: " + err;
-  });
-}
-</script>
+  function copyDetails(){
+    const det = document.getElementById('popup-details');
+    if(det && det.style.display !== 'none'){
+      navigator.clipboard.writeText(det.innerText)
+        .then(()=>alert("Detail transaksi disalin!"))
+        .catch(()=>alert("Gagal menyalin detail."));
+    }
+  }
 
-</body>
-</html>
+  function submitData(){
+    const action = document.getElementById('action').value;
+    const iddevice = document.getElementById('iddevice').value.trim();
+    const durasi = document.getElementById('durasi').value;
+
+    if(!iddevice){ showPopup('error','ID Device wajib diisi!'); return; }
+
+    document.getElementById('loading').style.display='flex';
+    const formData = new URLSearchParams();
+    formData.append('action', action);
+    formData.append('iddevice', iddevice);
+    formData.append('durasi', durasi);
+
+    fetch(SCRIPT_URL,{method:'POST',body:formData})
+    .then(res=>res.text())
+    .then(text=>{
+      let lines = text.split("\n");
+      let msg = lines[0]||'OK';
+      let detail = lines.slice(1).join("\n");
+      if(msg.toUpperCase().includes("BERHASIL")){
+        showPopup('success', msg, detail);
+      } else {
+        showPopup('error', msg + (detail?("\n"+detail):""));
+      }
+    })
+    .catch(err=> showPopup('error','Terjadi kesalahan!', err))
+    .finally(()=> document.getElementById('loading').style.display='none');
+  }
+  </script>
+
+  </body>
+  </html>
