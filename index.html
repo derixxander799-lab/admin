@@ -1,109 +1,101 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Device Manager</title>
-
-<style>
-*{box-sizing:border-box;font-family:Arial}
-body{
-  margin:0;min-height:100vh;
-  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-  display:flex;justify-content:center;align-items:center;padding:15px
-}
-.container{max-width:460px;width:100%}
-.card{
-  background:#fff;padding:22px;border-radius:16px;
-  box-shadow:0 15px 40px rgba(0,0,0,.25);margin-bottom:20px
-}
-h2{text-align:center;color:#203a43}
-input,select,button{
-  width:100%;padding:12px;margin-bottom:12px;
-  border-radius:8px;border:1px solid #ccc
-}
-.harga{background:#f1f5f9;padding:10px;border-radius:8px;text-align:center;font-weight:bold}
-button{background:#2c5364;color:#fff;border:none;font-weight:bold;cursor:pointer}
-button:hover{background:#203a43}
-.result{white-space:pre-line;display:none;background:#eef2f7;padding:12px;border-radius:8px}
-.loading{text-align:center;display:none}
-#copyBtn{display:none;background:#16a34a}
-</style>
+  <meta charset="UTF-8">
+  <title>Register / Extend Device</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 30px;
+    }
+    .box {
+      background: #fff;
+      padding: 20px;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,.1);
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    button {
+      background: #2196F3;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1976D2;
+    }
+    pre {
+      background: #eee;
+      padding: 10px;
+      white-space: pre-wrap;
+      margin-top: 15px;
+    }
+  </style>
 </head>
-
 <body>
-<div class="container">
 
-<div class="card">
-<h2>Register Device</h2>
-<input id="reg_iddevice" placeholder="ID Device">
-<select id="reg_durasi">
-  <option value="">Pilih Durasi</option>
-  <option value="3">3 Hari</option>
-  <option value="7">7 Hari</option>
-  <option value="15">15 Hari</option>
-</select>
-<div class="harga" id="reg_harga">Harga: -</div>
-<button onclick="submitData('register')">REGISTER</button>
-</div>
+<div class="box">
+  <h2>Register / Extend Device</h2>
 
-<div class="card">
-<h2>Perpanjang Durasi</h2>
-<input id="ext_iddevice" placeholder="ID Device">
-<select id="ext_durasi">
-  <option value="">Pilih Durasi</option>
-  <option value="3">+3 Hari</option>
-  <option value="7">+7 Hari</option>
-  <option value="15">+15 Hari</option>
-</select>
-<div class="harga" id="ext_harga">Harga: -</div>
-<button onclick="submitData('extend')">PERPANJANG</button>
-</div>
+  <label>Action</label>
+  <select id="action">
+    <option value="register">Register</option>
+    <option value="extend">Perpanjang</option>
+  </select>
 
-<div class="card">
-<div id="loading" class="loading">⏳ Memproses...</div>
-<div id="result" class="result"></div>
-<button id="copyBtn" onclick="copyText()">📋 Salin</button>
-</div>
+  <label>ID Device</label>
+  <input type="text" id="iddevice" placeholder="Contoh: DEVICE123">
 
+  <label>Durasi</label>
+  <select id="durasi">
+    <option value="3">3 Hari - Rp 3.000</option>
+    <option value="7">7 Hari - Rp 5.000</option>
+    <option value="15">15 Hari - Rp 10.000</option>
+  </select>
+
+  <button onclick="submitData()">Kirim</button>
+
+  <pre id="result">Hasil akan muncul di sini...</pre>
 </div>
 
 <script>
-const URL_API = "PASTE_URL_APPS_SCRIPT_MU_DISINI";
-const hargaMap = {3:3000,7:5000,15:10000};
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIiLynEPaWWV0YClkOZRHyB2TvwKjK405Fa3rGYw0uj5jNOmNwSiE0Joay5KmXUjoV9Q/exec";
 
-reg_durasi.onchange=()=>reg_harga.textContent=reg_durasi.value?"Harga: Rp "+hargaMap[reg_durasi.value]:"Harga: -";
-ext_durasi.onchange=()=>ext_harga.textContent=ext_durasi.value?"Harga: Rp "+hargaMap[ext_durasi.value]:"Harga: -";
+function submitData() {
+  const action   = document.getElementById("action").value;
+  const iddevice = document.getElementById("iddevice").value;
+  const durasi   = document.getElementById("durasi").value;
 
-function submitData(type){
-  let id = type==="register"?reg_iddevice.value.trim():ext_iddevice.value.trim();
-  let dur = type==="register"?reg_durasi.value:ext_durasi.value;
+  if (!iddevice) {
+    alert("ID Device wajib diisi!");
+    return;
+  }
 
-  if(!id||!dur){alert("Lengkapi data");return}
+  const formData = new URLSearchParams();
+  formData.append("action", action);
+  formData.append("iddevice", iddevice);
+  formData.append("durasi", durasi);
 
-  loading.style.display="block";
-  result.style.display="none";
-  copyBtn.style.display="none";
-
-  const d = new URLSearchParams();
-  d.append("action",type);
-  d.append("iddevice",id);
-  d.append("durasi",dur);
-
-  fetch(URL_API,{method:"POST",body:d})
-    .then(r=>r.text())
-    .then(t=>{
-      loading.style.display="none";
-      result.style.display="block";
-      result.textContent=t;
-      if(t.includes("BERHASIL"))copyBtn.style.display="block";
-    });
-}
-
-function copyText(){
-  navigator.clipboard.writeText(result.innerText);
-  alert("Disalin");
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.text())
+  .then(text => {
+    document.getElementById("result").textContent = text;
+  })
+  .catch(err => {
+    document.getElementById("result").textContent = "ERROR: " + err;
+  });
 }
 </script>
+
 </body>
 </html>
